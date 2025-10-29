@@ -428,7 +428,8 @@ if __name__ == "__main__":
         logger.info("No task left to run")
     else:
         print(f"Total {len(test_file_list)} tasks left")
-        args.render = False
+        # Commented out to respect user's --render flag
+        # args.render = False
         args.render_screenshot = True
         args.save_trace_enabled = True
 

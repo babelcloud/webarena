@@ -308,7 +308,7 @@ class HTMLContentEvaluator(Evaluator):
                     ref=required_contents, pred=selected_element
                 )
                 score *= float(cur_score)
-                # print(f"[exact match] {cur_score}, selected element: {selected_element}, required contents: {required_contents}")
+                print(f"[exact match] {cur_score}, selected element: {selected_element}, required contents: {required_contents}")
             elif "must_include" in target["required_contents"]:
                 required_contents = target["required_contents"]["must_include"]
                 assert isinstance(required_contents, list)
@@ -325,7 +325,7 @@ class HTMLContentEvaluator(Evaluator):
                         ]
                     )
                     score *= float(cur_score)
-                    # print(f"[must include] {cur_score}, selected element: {selected_element}, required contents: {content_or}")
+                    print(f"[must include] {cur_score}, selected element: {selected_element}, required contents: {content_or}")
             else:
                 raise ValueError(
                     f"Unknown required_contents: {target['required_contents'].keys()}"

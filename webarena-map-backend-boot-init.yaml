@@ -121,9 +121,9 @@ runcmd:
         wait $pid
         local exit_code=$?
         if [ $exit_code -eq 0 ]; then
-            echo "$(date): ✅ $desc completed successfully"
+            echo "$(date): [OK] $desc completed successfully"
         else
-            echo "$(date): ❌ $desc failed with exit code $exit_code"
+            echo "$(date): [FAIL] $desc failed with exit code $exit_code"
             return $exit_code
         fi
     }
@@ -161,22 +161,22 @@ runcmd:
     echo "$(date): Extracting OSM tile server data..."
     tar -C /var/lib/docker/volumes -xf /root/osm_tile_server.tar
     rm -f /root/osm_tile_server.tar  # Clean up immediately to save space
-    echo "$(date): ✅ OSM tile server data extracted and cleaned up"
+    echo "$(date): [OK] OSM tile server data extracted and cleaned up"
 
     echo "$(date): Extracting Nominatim data..."
     tar -C /var/lib/docker/volumes -xf /root/nominatim_volumes.tar
     rm -f /root/nominatim_volumes.tar  # Clean up immediately to save space
-    echo "$(date): ✅ Nominatim data extracted and cleaned up"
+    echo "$(date): [OK] Nominatim data extracted and cleaned up"
 
     echo "$(date): Extracting OSM dump..."
     tar -C /opt/osm_dump -xf /root/osm_dump.tar
     rm -f /root/osm_dump.tar  # Clean up immediately to save space
-    echo "$(date): ✅ OSM dump extracted and cleaned up"
+    echo "$(date): [OK] OSM dump extracted and cleaned up"
 
     echo "$(date): Extracting OSRM routing data..."
     tar -C /opt/osrm -xf /root/osrm_routing.tar
     rm -f /root/osrm_routing.tar  # Clean up immediately to save space
-    echo "$(date): ✅ OSRM routing data extracted and cleaned up"
+    echo "$(date): [OK] OSRM routing data extracted and cleaned up"
 
     # Verify extracted data
     echo "$(date): Verifying extracted data..."
@@ -245,25 +245,25 @@ runcmd:
 
     # Test tile server
     if curl -f -s -o /dev/null "http://localhost:8080/tile/0/0/0.png"; then
-        echo "$(date): ✅ Tile server is responding"
+        echo "$(date): [OK] Tile server is responding"
     else
-        echo "$(date): ❌ Tile server is not responding"
+        echo "$(date): [FAIL] Tile server is not responding"
     fi
 
     # Test Nominatim
     if curl -f -s -o /dev/null "http://localhost:8085/search?q=test&format=json&limit=1"; then
-        echo "$(date): ✅ Nominatim is responding"
+        echo "$(date): [OK] Nominatim is responding"
     else
-        echo "$(date): ❌ Nominatim is not responding"
+        echo "$(date): [FAIL] Nominatim is not responding"
     fi
 
     # Test OSRM services
     for service in car bike foot; do
         port=$((5000 + $(echo "car bike foot" | tr ' ' '\n' | grep -n $service | cut -d: -f1) - 1))
         if curl -f -s -o /dev/null "http://localhost:$port/route/v1/$service/-79.9959,40.4406;-79.9,40.45?overview=false"; then
-            echo "$(date): ✅ OSRM $service routing is responding"
+            echo "$(date): [OK] OSRM $service routing is responding"
         else
-            echo "$(date): ❌ OSRM $service routing is not responding"
+            echo "$(date): [FAIL] OSRM $service routing is not responding"
         fi
     done
 

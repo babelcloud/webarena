@@ -145,18 +145,35 @@ def gitlab_get_project_memeber_role(page: Page, account_name: str) -> str:
 
 def llm_fuzzy_match(pred: str, reference: str, question: str) -> float:
     """Check whether the prediction matches the reference with GPT4-turbo"""
+    import logging
+    logger = logging.getLogger(__name__)
+
     messages: list[dict[str, Any]] = []
     # construct the question to ask
-    message = "Help a teacher to grade the answer of a student given a question. Keep in mind that the student may use different phrasing or wording to answer the question. The goal is to evaluate whether the answer is semantically equivalent to the reference answer.\n"
+    message = "Help a teacher to grade the answer of a student given a question. The reference answer is the GROUND TRUTH that you are checking for.\n\n"
+    message += "YOUR ONLY JOB: Check if the student's answer contains the information in the reference answer. The reference answer may be incomplete (a partial answer). The student may provide additional information beyond the reference - THIS IS OKAY and should NOT be penalized.\n\n"
+    message += "Judge as 'correct' if the reference information is present in the student's answer, even if the student included extra correct information. Only mark as 'incorrect' if the reference information is missing or wrong.\n\n"
     message += f"question: {question}\n"
-    message += f"reference answer: {reference}\n"
+    message += f"reference answer (ground truth to check for): {reference}\n"
     message += "all the string 'N/A' that you see is a special sequence that means 'not achievable'\n"
-    message += f"student answer: {pred}\n"
+    message += f"student answer: {pred}\n\n"
     message += "Conclude the judgement by correct/incorrect/partially correct."
     messages = [
         {"role": "system", "content": "You are a helpful assistant"},
         {"role": "user", "content": message},
     ]
+
+    print("\n" + "="*80)
+    print("🤖 GPT-4 FUZZY MATCH EVALUATION")
+    print("="*80)
+    print(f"📝 Reference Answer: {reference}")
+    print(f"🎯 Student Answer: {pred[:200]}{'...' if len(pred) > 200 else ''}")
+    print("-"*80)
+
+    logger.info("="*80)
+    logger.info("🤖 GPT-4 FUZZY MATCH EVALUATION")
+    logger.info(f"📝 Reference Answer: {reference}")
+    logger.info(f"🎯 Student Answer: {pred}")
 
     response = generate_from_openai_chat_completion(
         model="gpt-4-1106-preview",
@@ -166,10 +183,21 @@ def llm_fuzzy_match(pred: str, reference: str, question: str) -> float:
         top_p=1.0,
         context_length=0,
     ).lower()
+
+    print(f"💭 GPT-4 Response: {response}")
+    print("-"*80)
+    logger.info(f"💭 GPT-4 Response: {response}")
+
     if "partially correct" in response or "incorrect" in response:
+        print("❌ Result: FAILED (0.0)")
+        print("="*80 + "\n")
+        logger.info("❌ Result: FAILED (0.0)")
         return 0.0
     else:
         assert "correct" in response
+        print("✅ Result: PASSED (1.0)")
+        print("="*80 + "\n")
+        logger.info("✅ Result: PASSED (1.0)")
         return 1.0
 
 
