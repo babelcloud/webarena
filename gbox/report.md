@@ -4,7 +4,7 @@
 
 <br></br>
 
-At GBox, we've demonstrated how the right tools can significantly enhance the reliability of autonomous web agents. By integrating Claude Code with the GBox MCP, our system achieved a 62% task success rate on WebArena, a comprehensive benchmark comprising 812 diverse web automation tasks across various websites and applications. This benchmark serves as a rigorous validation environment, and these results showcase how GBox enables agents to move beyond brittle, rule-based automation toward robust, production-ready systems capable of handling the complexity of modern web applications.
+At GBOX, we've demonstrated how the right tools can significantly enhance the reliability of autonomous web agents. By integrating Claude Code with the GBOX MCP, our system achieved a 62% task success rate on WebArena, a comprehensive benchmark comprising 812 diverse web automation tasks across various websites and applications. This benchmark serves as a rigorous validation environment, and these results showcase how GBOX enables agents to move beyond brittle, rule-based automation toward robust, production-ready systems capable of handling the complexity of modern web applications.
 
 
 ## Why Claude Code + GBOX Made the Difference
@@ -247,7 +247,7 @@ While WebArena provides a comprehensive testing environment, we identified sever
 
 2. **Vague Task Descriptions**: Some tasks contain ambiguous or vague instructions that don't clearly specify the expected outcome. These unclear requirements test the agent's ability to interpret instructions rather than its web navigation or GUI interaction capabilities.
 
-Despite these limitations, our approach with GBox MCP demonstrates robust performance by handling these challenges through careful prompt engineering and adaptive behavior strategies.
+Despite these limitations, our approach with GBOX MCP demonstrates robust performance by handling these challenges through careful prompt engineering and adaptive behavior strategies.
 
 ## How to Run WebArena Benchmark with GBOX MCP
 
