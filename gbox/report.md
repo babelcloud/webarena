@@ -256,7 +256,7 @@ Despite these limitations, our approach with GBox MCP demonstrates robust perfor
 
 1. Go to [gbox.ai](https://gbox.ai/) and create a Linux box.
 2. Set up the [GBOX Browser MCP server](https://www.npmjs.com/package/@gbox.ai/mcp-server).
-3. Set up the task completion server using the included [task_completion_mcp.py](task_completion_mcp.py) to register the local MCP tool. This enables Claude to signal the benchmark when a task is completed.
+3. Set up the task completion server using the included [task_completion_mcp.py](https://github.com/babelcloud/webarena/blob/main/task_completion_mcp.py) to register the local MCP tool. This enables Claude to signal the benchmark when a task is completed.
 
 4. Run the scaling script to optimize screenshots for Claude's image processing:
    ```bash
@@ -276,5 +276,5 @@ Despite these limitations, our approach with GBox MCP demonstrates robust perfor
    ```bash
    tmux attach -t webarena_gbox
    ```
-```
+
 
