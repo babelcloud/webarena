@@ -2,6 +2,9 @@
 
 ## Introduction
 
+
+<img width="1779" height="980" alt="output" src="https://github.com/user-attachments/assets/9a410bde-dc92-40fb-94ec-81bb5d567b25" />
+
 <br></br>
 
 At GBOX, we've demonstrated how the right tools can significantly enhance the reliability of autonomous web agents. By integrating Claude Code with the GBOX MCP, our system achieved a 62% task success rate on WebArena, a comprehensive benchmark comprising 812 diverse web automation tasks across various websites and applications. This benchmark serves as a rigorous validation environment, and these results showcase how GBOX enables agents to move beyond brittle, rule-based automation toward robust, production-ready systems capable of handling the complexity of modern web applications.
