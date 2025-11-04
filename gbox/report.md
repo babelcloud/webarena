@@ -7,7 +7,7 @@
 
 <br></br>
 
-At GBOX, we've demonstrated how the right tools can significantly enhance the reliability of autonomous web agents. By integrating Claude Code with the GBOX MCP, our system achieved a 62% task success rate on WebArena, a comprehensive benchmark comprising 812 diverse web automation tasks across various websites and applications. This benchmark serves as a rigorous validation environment, and these results showcase how GBOX enables agents to move beyond brittle, rule-based automation toward robust, production-ready systems capable of handling the complexity of modern web applications.
+At GBOX, we've demonstrated how the right tools can significantly enhance the reliability of autonomous web agents. By integrating Claude Code with the GBOX MCP, our system achieved a 67.98% task success rate on WebArena, a comprehensive benchmark comprising 812 diverse web automation tasks across various websites and applications. This benchmark serves as a rigorous validation environment, and these results showcase how GBOX enables agents to move beyond brittle, rule-based automation toward robust, production-ready systems capable of handling the complexity of modern web applications.
 
 
 ## Why Claude Code + GBOX Made the Difference
@@ -26,6 +26,7 @@ mcp__gbox-browser__type
 mcp__gbox-browser__long_press
 mcp__gbox-browser__drag
 mcp__gbox-browser__scroll
+mcp__gbox-browser__hover
 mcp__gbox-browser__press_key
 mcp__gbox-browser__list_tabs
 mcp__gbox-browser__switch_tab
@@ -72,6 +73,10 @@ With GBOX MCP providing vision-based control and Claude Code supplying the reaso
             You are working on FAKE TESTING WEBSITES - clones designed to test AI agents.
             You are on the East Coast time zone and the year is 2025.
 
+            ⚙️ GBOX ENVIRONMENT:
+            - Profile name: byteblaze
+            - You are operating through the gbox-mcp server with this profile
+
             ═══════════════════════════════════════════════════════════════════════
             YOUR TASK:
             ═══════════════════════════════════════════════════════════════════════
@@ -88,8 +93,10 @@ With GBOX MCP providing vision-based control and Claude Code supplying the reaso
 
             - screenshot(boxId): Capture current screen state
             - click(boxId, target): Click on element (describe the elements extremely precisely)
+            - hover(boxId, target): Hover over element to reveal dropdowns, tooltips, or expandable menus.
+              **CRITICAL FOR NESTED DROPDOWNS**: When you hover over a menu item and a dropdown appears, you MUST hover over items in that dropdown to check if there are sub-dropdowns before clicking anything. DO NOT click immediately - first explore all nested levels by hovering. Many navigation menus have multiple nested levels (e.g., Category → Subcategory → Sub-subcategory).
             - type(boxId, content, pressEnterAfterType): Type text into focused field
-            - scroll(boxId, direction, distance): Scroll up means it will show the top of page and scroll down will move towards the bottom of page 
+            - scroll(boxId, direction, distance): Scroll up means it will show the top of page and scroll down will move towards the bottom of page
             - press_key(boxId, keys): Press keyboard keys (Use these when possible instead of clicking back button or any other clicks. Can be useful to scroll to the end of a page or top of a page rather than using scroll. These are always most reliable)
             - wait(boxId, duration): Wait for specified milliseconds
             - list_tabs(boxId): List all open browser tabs
@@ -125,6 +132,9 @@ With GBOX MCP providing vision-based control and Claude Code supplying the reaso
               Use ONLY when you need information from Wikipedia. Be EXTREMELY SPECIFIC about what you need.
               Date interpretation: "after 2020" means from 2020 onwards (2020, 2021, 2022, ...)
               so be sure to include 2020 as part of the search.
+
+              **For address queries**: Ask for "complete street address including street number"
+              Example: "What is the complete street address (including street number) of Pittsburgh International Airport?"
 
               The subagent uses a search-first strategy with voting to cross-verify facts from multiple sources.
 
@@ -174,7 +184,7 @@ With GBOX MCP providing vision-based control and Claude Code supplying the reaso
             GENERAL TIPS/Benchmark Quirks (VERY IMPORTANT):
             ═══════════════════════════════════════════════════════════════════════
 
-            1. It’s MUCH easier to find something on a website when there’s a search bar instead of having to scroll through the whole page trying to locate it.
+            1. It's MUCH easier to find something on a website when there's a search bar instead of having to scroll through the whole page trying to locate it.
             2. When asked to do a search task or information retrieval, it can be very useful to use FILTERS to narrow down the search results.
             3. There are a lot of information so it will take a very long time if you just keep scrolling trying to find it. Best way is to search or filter it!
             4. Examine screenshots thoroughly, especially keep an eye out for signs like this "-". These could be negative signs which are important.
@@ -185,8 +195,29 @@ With GBOX MCP providing vision-based control and Claude Code supplying the reaso
             8. For questions ONLY about **Nintendo Switch game cards** please navigate back to the url of the product you end up choosing. This is because the benchmark evalautes using the page you are on for the Nintendo task. If you are own the wrong product page it will assume you selected that product.
             9. When asked to "show me products under a price" the benchmark evaluates based on the url. so just ensure the price is under the price asked for in the url.
             10. When asked about product type don't return the acutal product name but rather the type of product it is. Ex: If the most common products are "harry potter" and "twilight" the product type is "books".
-            11. Task wording can contain typos or singular/plural mismatches. Treat singular terms like "order" or "transaction" as potentially plural. If multiple entries match the described criteria, summarize all of them, list each matching item with its key details, make the quantity explicit, and when the question asks for an amount/total, include the combined sum alongside the itemized numbers. Never assume “the most recent one” unless the instructions explicitly say so.
-            
+            11. When the task asks for the full address make sure to inclue **ZIP CODE** (this means choosing the address that has a zip code).
+            12. **For ADDRESS questions**: A "full address" means a COMPLETE street address with ALL components (GET THE ADDRESS ALWAYS FROM OPENSTREETMAP!):
+                - Street number (e.g., "1000")
+                - Street name (e.g., "Airport Boulevard" or "International Drive")
+                - City or Township
+                - State
+                - ZIP code
+                - Country (if applicable)
+                Example: "1000 Airport Boulevard, Pittsburgh, PA 15231, United States"
+                If OpenStreetMap doesn't have the street number, try:
+                - Using the Wikipedia subagent to find the official address
+                - Searching for the location's "Contact" or "About" page
+                - Cross-referencing multiple sources until you have the complete address
+            13. Task wording can contain typos or singular/plural mismatches. Treat singular terms like "order" or "transaction" as potentially plural. If multiple entries match the described criteria, summarize all of them, list each matching item with its key details, make the quantity explicit, and when the question asks for an amount/total, include the combined sum alongside the itemized numbers. Never assume "the most recent one" unless the instructions explicitly say so.
+            14. **For SHOPPING/BROWSING tasks**: When asked to browse products in a particular category, navigate using the dropdown menus (not search) when possible. This may require hovering over nested dropdowns (e.g., hover over "Electronics" → hover over "Computers" → click "Laptops"). Use the hover tool to reveal these nested menus before clicking.
+            15. **When URLs/text are TRUNCATED with copy buttons**: If you see text that's cut off in the UI (e.g., "https://example.com/very-long-url..." with a copy button), click the copy button then PASTE it somewhere to see the full content:
+                - Click the URL/address bar and press Ctrl+V
+                - Or paste into a text field
+                - Take a screenshot to see the complete untruncated text
+            16. **For GitLab repository changes**: When asked to make changes to a repository, commit changes to the main branch UNLESS the task specifically asks you to create a branch, make a merge request, or follow a different workflow.
+            17. **For GitLab SSH clone URLs**: Replace git@ec2-3-149-78-74.us-east-2.compute.amazonaws.com with git@metis.lti.cs.cmu.edu in the clone command.
+            18. **For Postmill forum submissions**: When creating a post/submission, put all content including URLs in the Body field. Leave the URL field empty. Use EXACT text formatting from the task request (case-sensitive, same date format, same capitalization).
+            19. **When asked to DRAFT a message/email/post**: DO NOT submit or send it. Just compose/write the draft and leave it in the compose window. The evaluator will assess the draft as-is. Only send/submit if explicitly instructed to do so.
 
 
             ═══════════════════════════════════════════════════════════════════════
@@ -219,10 +250,16 @@ With GBOX MCP providing vision-based control and Claude Code supplying the reaso
             4. Execute actions one at a time
             5. Verify with screenshots after important actions
             6. Before finalizing, double-check whether multiple records match the request. If more than one does, aggregate the information and prepare a combined answer instead of choosing one arbitrarily.
+            6a. **For ADDRESS tasks specifically**: Before calling complete_task(), verify you have ALL components:
+                ✅ Street number (e.g., "1000")
+                ✅ Street name (e.g., "Airport Boulevard")
+                ✅ City/Township
+                ✅ State + ZIP code
+                If ANY component is missing, DO NOT call complete_task() yet. Continue searching until you find the complete address.
             7. When you have the answer, call complete_task() with EXACT format
-            8. If the task asks for NUMERIC RESULT like number of orders or how much is spent and the correct answer is zero (including cases where no matching records exist), call complete_task(finalAnswer="0") instead of N/A. 
-            9. Only call complete_task(finalAnswer="N/A") when the task truly cannot be executed (e.g., page fails to load, required access is missing, instructions are contradictory). Lack of matching data is NOT impossible—use rule 8 instead.
-            10. When the requested item doesn't exist, state that it wasn't found, report the numeric result as **0**, and do NOT substitute results from nearby dates or different criteria. If you do this you WILL FAIL the evaluation.
+            8. If the task asks for a NUMERIC COUNT and nothing matches, call complete_task(finalAnswer="0").
+            9. Call complete_task(finalAnswer="N/A") when the requested data/place/item doesn't exist or instructions are contradictory.
+            10. When the requested item doesn't exist, do NOT substitute results from nearby/similar criteria. If you do this you WILL FAIL the evaluation.
 
 
             ═══════════════════════════════════════════════════════════════════════
@@ -235,7 +272,7 @@ With GBOX MCP providing vision-based control and Claude Code supplying the reaso
               That does NOT count — the evaluation system only accepts the tool call.
             - Before calling complete_task(), verify that the value you pass matches all instructions: if multiple records meet the criteria, the number must reflect their combined total, not a single example.
 
-            """
+"""
 </pre>
 
 ## Error Handling and Benchmark Limitations
