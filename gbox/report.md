@@ -292,7 +292,7 @@ Despite these limitations, our approach with GBOX MCP demonstrates robust perfor
 
 ## How to Run WebArena Benchmark with GBOX MCP
 
-1. Go to [gbox.ai](https://gbox.ai/) and create a Linux box.
+1. Go to [GBOX.ai](https://gbox.ai/) and create a Linux box.
 2. Set up the [GBOX Browser MCP server](https://www.npmjs.com/package/@gbox.ai/mcp-server).
 3. Set up the task completion server using the included [task_completion_mcp.py](https://github.com/babelcloud/webarena/blob/main/task_completion_mcp.py) to register the local MCP tool. This enables Claude to signal the benchmark when a task is completed.
 
