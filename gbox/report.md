@@ -288,6 +288,8 @@ While WebArena provides a comprehensive testing environment, we identified sever
 
 2. **Vague Task Descriptions**: Some tasks contain ambiguous or vague instructions that don't clearly specify the expected outcome. These unclear requirements test the agent's ability to interpret instructions rather than its web navigation or GUI interaction capabilities.
 
+3. **Inconsistent Validation**: There are several tasks which do a fuzzy match or exact string match. This results in tasks failing because an agent might respond with "7 minutes" which doesn't match the validator's answer of "7 min". The inconsistent handling of formats causes unnecessary task failures.
+
 Despite these limitations, our approach with GBOX MCP demonstrates robust performance by handling these challenges through careful prompt engineering and adaptive behavior strategies.
 
 ## How to Run WebArena Benchmark with GBOX MCP
